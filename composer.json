@@ -1,0 +1,14 @@
+{
+    "name": "kbussche/laravel-dweet",
+    "description": "Simple tool for chatting with the dweets",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "authors": [
+        {
+            "name": "Kurt Bussche",
+            "email": "kbussche@gmail.com"
+        }
+    ]
+}
