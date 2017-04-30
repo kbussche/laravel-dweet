@@ -6,7 +6,8 @@ class URLBuilder
 {
     const DWEET_BASE_URL = 'https://dweet.io/';
     const DWEET_WRITE = 'dweet/for';
-    const DWEET_READ = 'get';
+    const DWEET_READ = 'get/dweets/for';
+    const DWEET_LATEST = 'get/latest/dweet/for';
 
     private $url;
     private $thing;
@@ -14,8 +15,7 @@ class URLBuilder
 
     public function __construct()
     {
-        $this->url = self::DWEET_BASE_URL;
-        $this->date = new Carbon();
+        $this->init();
     }
 
     public function write()
@@ -27,6 +27,12 @@ class URLBuilder
     public function read()
     {
         $this->url .= self::DWEET_READ;
+        return $this;
+    }
+
+    public function readAll()
+    {
+        $this->url .= self::DWEET_LATEST;
         return $this;
     }
 
@@ -44,7 +50,23 @@ class URLBuilder
 
     public function build()
     {
-        return $this->url . '/' . $this->name . '?' . http_build_query($this->payload);
+        $url = $this->url . '/' . $this->name; 
+        
+        if (!empty($this->payload)) {
+            $url .= '?' . http_build_query($this->payload);
+        }
+
+        $this->init();
+
+        return $url;
+    }
+
+    private function init()
+    {
+        $this->url = self::DWEET_BASE_URL;
+        $this->name = null;
+        $this->payload = null;
+        $this->date = new Carbon();
     }
 
 }
