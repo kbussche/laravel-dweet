@@ -39,7 +39,23 @@ class Service
             ->name($key_name)
             ->build();
         
-        return Dweet::fromResponse($this->send($url));
+        return Dweet::fromResponse($this->fetch($url));
+    }
+
+    /* Break these two methods into their own http abstration */
+    private function fetch($url)
+    {
+        $options = [
+            'timeout' => 6
+        ];
+
+        $response = $this->client->request('GET', $url, $options);
+
+        if ($response->getReasonPhrase() != 'OK') {
+            return false;
+        }
+
+        return $response->getBody();
     }
 
     private function send($url)
