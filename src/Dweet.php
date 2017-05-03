@@ -23,6 +23,11 @@ class Dweet
         return $result;
     }
 
+    public static function empty()
+    {
+        return new Dweet(null, new Datetime(), 'no result');
+    }
+
     public function __construct($thing, $created, $content)
     {
         $this->thing = $thing;

@@ -38,8 +38,14 @@ class Service
             ->read()
             ->name($key_name)
             ->build();
-        
-        return Dweet::fromResponse($this->fetch($url));
+
+        $result = $this->fetch($url);
+
+        if ($result) {
+            return Dweet::fromResponse($result);
+        }
+
+        return Dweet::empty(); 
     }
 
     /* Break these two methods into their own http abstration */
@@ -49,7 +55,12 @@ class Service
             'timeout' => 6
         ];
 
-        $response = $this->client->request('GET', $url, $options);
+        try {
+            $response = $this->client->request('GET', $url, $options);
+        } catch (Exception $e) {
+            \Log::info('Dweet is not reachable: try later', [$e->getMessage()]);
+            return false;
+        }
 
         if ($response->getReasonPhrase() != 'OK') {
             return false;
@@ -64,8 +75,13 @@ class Service
             'timeout' => 6
         ];
 
-        $response = $this->client->request('GET', $url, $options);
-        
+        try {
+            $response = $this->client->request('GET', $url, $options);
+        } catch (Exception $e) {
+            \Log::info('Dweet is not reachable: try later', [$e->getMessage()]);
+            return false;
+        }
+
         if ($response->getReasonPhrase() === 'OK') {
             return true;
         }
