@@ -34,4 +34,9 @@ class Dweet
         $this->created = $created;
         $this->content = $content;
     }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
 }
